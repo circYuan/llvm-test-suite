@@ -85,6 +85,16 @@ def parse(context, filename):
         context.test, context.tmpDir, context.tmpBase
     )
     substitutions += [("%o", outfile)]
+
+    # For remote runs, remap %S/%s/%p from local source root to remote exec root
+    if getattr(context.config, 'remote_root', ''):
+        substitutions = [
+            (k, v.replace(context.config.test_source_root,
+                          context.config.test_exec_root, 1)
+             if isinstance(v, str) and v.startswith(context.config.test_source_root) else v)
+            for k, v in substitutions
+        ]
+
     preparescript = applySubstitutions(preparescript, substitutions)
     runscript = applySubstitutions(runscript, substitutions)
     verifyscript = applySubstitutions(verifyscript, substitutions)

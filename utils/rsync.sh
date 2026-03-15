@@ -4,6 +4,7 @@ set -eu
 CLIENT="$1"
 DEVICE="$2"
 BUILDDIR="$3"
+DEVICE_ROOT="$4"
 
 case $BUILDDIR in
     /*) ;;
@@ -32,5 +33,5 @@ RSYNC_FLAGS+=" --exclude=rules.ninja"
 RSYNC_FLAGS+=" --exclude=CMakeFiles/"
 
 set -x
-$CLIENT $DEVICE mkdir -p "$BUILDDIR"
-eval rsync $RSYNC_FLAGS $BUILDDIR/ $DEVICE:$BUILDDIR/
+$CLIENT $DEVICE mkdir -p "$DEVICE_ROOT$BUILDDIR"
+eval rsync $RSYNC_FLAGS $BUILDDIR/ $DEVICE:$DEVICE_ROOT$BUILDDIR/

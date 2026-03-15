@@ -4,7 +4,8 @@ import os
 _directory = os.path.dirname(os.path.abspath(__file__))
 
 config.test_source_root = _directory
-config.test_exec_root = _directory
+config.remote_root = "@TEST_SUITE_REMOTE_ROOT@"
+config.test_exec_root = os.path.join("@TEST_SUITE_REMOTE_ROOT@", os.path.relpath(_directory, '/')) if config.remote_root else _directory
 config.remote_client = "@TEST_SUITE_REMOTE_CLIENT@"
 config.remote_host = "@TEST_SUITE_REMOTE_HOST@"
 config.run_under = "@TEST_SUITE_RUN_UNDER@"

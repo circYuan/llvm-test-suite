@@ -63,7 +63,7 @@ def _executeScript(context, script, scriptBaseName, useExternalSh=True):
     res = executeFunc(
         context.test,
         context.litConfig,
-        context.tmpBase + "_" + scriptBaseName,
+        context.sourceTmpBase + "_" + scriptBaseName,
         script,
         execdir,
     )
@@ -202,11 +202,13 @@ class TestContext:
     extra instrumentation/measurement wrappers to pass the filenames of the
     results to a final data collection step."""
 
-    def __init__(self, test, litConfig, tmpDir, tmpBase):
+    def __init__(self, test, litConfig, tmpDir, tmpBase, sourceTmpDir, sourceTmpBase):
         self.test = test
         self.config = test.config
         self.litConfig = litConfig
         self.tmpDir = tmpDir
         self.tmpBase = tmpBase
+        self.sourceTmpDir = sourceTmpDir
+        self.sourceTmpBase = sourceTmpBase
         self.read_result_file = default_read_result_file
         self.profilefile = None

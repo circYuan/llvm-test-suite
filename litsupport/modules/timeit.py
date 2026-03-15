@@ -17,7 +17,7 @@ def _mutateCommandLine(context, commandline):
     else:
         timeit_name = "timeit-target"
 
-    timeit = os.path.normpath("%s/tools/%s" % (config.test_source_root, timeit_name))
+    timeit = os.path.normpath("%s/tools/%s" % (config.test_exec_root, timeit_name))
     args = ["--timeout", "7200"]
     if os.name != 'nt':
         args += ["--limit-core", "0"]

@@ -38,10 +38,23 @@ class TestSuiteTest(lit.formats.ShTest):
 
         # Parse .test file and initialize context
         tmpDir, tmpBase = lit.TestRunner.getTempPaths(test)
-        pathlib.Path(tmpBase).parent.mkdir(parents=True, exist_ok=True)
-        context = litsupport.testplan.TestContext(test, litConfig, tmpDir, tmpBase)
+        if getattr(config, "remote_root", ''):
+            sourceTmpDir = os.path.join(config.test_source_root,
+                                        os.path.relpath(tmpDir, config.test_exec_root))
+            sourceTmpBase = os.path.join(config.test_source_root,
+                                         os.path.relpath(tmpBase, config.test_exec_root))
+        else:
+            sourceTmpDir = tmpDir
+            sourceTmpBase = tmpBase
+        pathlib.Path(sourceTmpBase).parent.mkdir(parents=True, exist_ok=True)
+        context = litsupport.testplan.TestContext(test, litConfig, tmpDir,
+                                                  tmpBase, sourceTmpDir, sourceTmpBase)
         litsupport.testfile.parse(context, test.getSourcePath())
         plan = litsupport.testplan.TestPlan()
+
+        if config.remote_root:
+            context.executable = os.path.join(config.test_source_root,
+                                              os.path.relpath(context.executable, config.test_exec_root))
 
         # Report missing test executables.
         if not os.path.exists(context.executable):
